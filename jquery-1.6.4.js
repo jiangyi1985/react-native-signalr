@@ -896,11 +896,11 @@ jQuery.each("Boolean Number String Function Array Date RegExp Object".split(" ")
 	class2type[ "[object " + name + "]" ] = name.toLowerCase();
 });
 
-browserMatch = jQuery.uaMatch( userAgent );
-if ( browserMatch.browser ) {
-	jQuery.browser[ browserMatch.browser ] = true;
-	jQuery.browser.version = browserMatch.version;
-}
+// browserMatch = jQuery.uaMatch( userAgent );
+// if ( browserMatch.browser ) {
+// 	jQuery.browser[ browserMatch.browser ] = true;
+// 	jQuery.browser.version = browserMatch.version;
+// }
 
 // Deprecated, use jQuery.browser.webkit instead
 if ( jQuery.browser.webkit ) {
@@ -917,21 +917,21 @@ if ( rnotwhite.test( "\xA0" ) ) {
 rootjQuery = jQuery(document);
 
 // Cleanup functions for the document ready method
-if ( document.addEventListener ) {
-	DOMContentLoaded = function() {
-		document.removeEventListener( "DOMContentLoaded", DOMContentLoaded, false );
-		jQuery.ready();
-	};
-
-} else if ( document.attachEvent ) {
-	DOMContentLoaded = function() {
-		// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
-		if ( document.readyState === "complete" ) {
-			document.detachEvent( "onreadystatechange", DOMContentLoaded );
-			jQuery.ready();
-		}
-	};
-}
+// if ( document.addEventListener ) {
+// 	DOMContentLoaded = function() {
+// 		document.removeEventListener( "DOMContentLoaded", DOMContentLoaded, false );
+// 		jQuery.ready();
+// 	};
+//
+// } else if ( document.attachEvent ) {
+// 	DOMContentLoaded = function() {
+// 		// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
+// 		if ( document.readyState === "complete" ) {
+// 			document.detachEvent( "onreadystatechange", DOMContentLoaded );
+// 			jQuery.ready();
+// 		}
+// 	};
+// }
 
 // The DOM ready check for Internet Explorer
 function doScrollCheck() {
@@ -1155,260 +1155,260 @@ jQuery.extend({
 
 
 
-jQuery.support = (function() {
+// jQuery.support = (function() {
+//
+// 	var div = document.createElement( "div" ),
+// 		documentElement = document.documentElement,
+// 		all,
+// 		a,
+// 		select,
+// 		opt,
+// 		input,
+// 		marginDiv,
+// 		support,
+// 		fragment,
+// 		body,
+// 		testElementParent,
+// 		testElement,
+// 		testElementStyle,
+// 		tds,
+// 		events,
+// 		eventName,
+// 		i,
+// 		isSupported;
+//
+// 	// Preliminary tests
+// 	div.setAttribute("className", "t");
+// 	div.innerHTML = "   <link/><table></table><a href='/a' style='top:1px;float:left;opacity:.55;'>a</a><input type='checkbox'/>";
+//
+//
+// 	all = div.getElementsByTagName( "*" );
+// 	a = div.getElementsByTagName( "a" )[ 0 ];
+//
+// 	// Can't get basic test support
+// 	if ( !all || !all.length || !a ) {
+// 		return {};
+// 	}
+//
+// 	// First batch of supports tests
+// 	select = document.createElement( "select" );
+// 	opt = select.appendChild( document.createElement("option") );
+// 	input = div.getElementsByTagName( "input" )[ 0 ];
+//
+// 	support = {
+// 		// IE strips leading whitespace when .innerHTML is used
+// 		leadingWhitespace: ( div.firstChild.nodeType === 3 ),
+//
+// 		// Make sure that tbody elements aren't automatically inserted
+// 		// IE will insert them into empty tables
+// 		tbody: !div.getElementsByTagName( "tbody" ).length,
+//
+// 		// Make sure that link elements get serialized correctly by innerHTML
+// 		// This requires a wrapper element in IE
+// 		htmlSerialize: !!div.getElementsByTagName( "link" ).length,
+//
+// 		// Get the style information from getAttribute
+// 		// (IE uses .cssText instead)
+// 		style: /top/.test( a.getAttribute("style") ),
+//
+// 		// Make sure that URLs aren't manipulated
+// 		// (IE normalizes it by default)
+// 		hrefNormalized: ( a.getAttribute( "href" ) === "/a" ),
+//
+// 		// Make sure that element opacity exists
+// 		// (IE uses filter instead)
+// 		// Use a regex to work around a WebKit issue. See #5145
+// 		opacity: /^0.55$/.test( a.style.opacity ),
+//
+// 		// Verify style float existence
+// 		// (IE uses styleFloat instead of cssFloat)
+// 		cssFloat: !!a.style.cssFloat,
+//
+// 		// Make sure that if no value is specified for a checkbox
+// 		// that it defaults to "on".
+// 		// (WebKit defaults to "" instead)
+// 		checkOn: ( input.value === "on" ),
+//
+// 		// Make sure that a selected-by-default option has a working selected property.
+// 		// (WebKit defaults to false instead of true, IE too, if it's in an optgroup)
+// 		optSelected: opt.selected,
+//
+// 		// Test setAttribute on camelCase class. If it works, we need attrFixes when doing get/setAttribute (ie6/7)
+// 		getSetAttribute: div.className !== "t",
+//
+// 		// Will be defined later
+// 		submitBubbles: true,
+// 		changeBubbles: true,
+// 		focusinBubbles: false,
+// 		deleteExpando: true,
+// 		noCloneEvent: true,
+// 		inlineBlockNeedsLayout: false,
+// 		shrinkWrapBlocks: false,
+// 		reliableMarginRight: true
+// 	};
+//
+// 	// Make sure checked status is properly cloned
+// 	input.checked = true;
+// 	support.noCloneChecked = input.cloneNode( true ).checked;
+//
+// 	// Make sure that the options inside disabled selects aren't marked as disabled
+// 	// (WebKit marks them as disabled)
+// 	select.disabled = true;
+// 	support.optDisabled = !opt.disabled;
+//
+// 	// Test to see if it's possible to delete an expando from an element
+// 	// Fails in Internet Explorer
+// 	try {
+// 		delete div.test;
+// 	} catch( e ) {
+// 		support.deleteExpando = false;
+// 	}
+//
+// 	if ( !div.addEventListener && div.attachEvent && div.fireEvent ) {
+// 		div.attachEvent( "onclick", function() {
+// 			// Cloning a node shouldn't copy over any
+// 			// bound event handlers (IE does this)
+// 			support.noCloneEvent = false;
+// 		});
+// 		div.cloneNode( true ).fireEvent( "onclick" );
+// 	}
+//
+// 	// Check if a radio maintains it's value
+// 	// after being appended to the DOM
+// 	input = document.createElement("input");
+// 	input.value = "t";
+// 	input.setAttribute("type", "radio");
+// 	support.radioValue = input.value === "t";
+//
+// 	input.setAttribute("checked", "checked");
+// 	div.appendChild( input );
+// 	fragment = document.createDocumentFragment();
+// 	fragment.appendChild( div.firstChild );
+//
+// 	// WebKit doesn't clone checked state correctly in fragments
+// 	support.checkClone = fragment.cloneNode( true ).cloneNode( true ).lastChild.checked;
+//
+// 	div.innerHTML = "";
+//
+// 	// Figure out if the W3C box model works as expected
+// 	div.style.width = div.style.paddingLeft = "1px";
+//
+// 	body = document.getElementsByTagName( "body" )[ 0 ];
+// 	// We use our own, invisible, body unless the body is already present
+// 	// in which case we use a div (#9239)
+// 	testElement = document.createElement( body ? "div" : "body" );
+// 	testElementStyle = {
+// 		visibility: "hidden",
+// 		width: 0,
+// 		height: 0,
+// 		border: 0,
+// 		margin: 0,
+// 		background: "none"
+// 	};
+// 	if ( body ) {
+// 		jQuery.extend( testElementStyle, {
+// 			position: "absolute",
+// 			left: "-1000px",
+// 			top: "-1000px"
+// 		});
+// 	}
+// 	for ( i in testElementStyle ) {
+// 		testElement.style[ i ] = testElementStyle[ i ];
+// 	}
+// 	testElement.appendChild( div );
+// 	testElementParent = body || documentElement;
+// 	testElementParent.insertBefore( testElement, testElementParent.firstChild );
+//
+// 	// Check if a disconnected checkbox will retain its checked
+// 	// value of true after appended to the DOM (IE6/7)
+// 	support.appendChecked = input.checked;
+//
+// 	support.boxModel = div.offsetWidth === 2;
+//
+// 	if ( "zoom" in div.style ) {
+// 		// Check if natively block-level elements act like inline-block
+// 		// elements when setting their display to 'inline' and giving
+// 		// them layout
+// 		// (IE < 8 does this)
+// 		div.style.display = "inline";
+// 		div.style.zoom = 1;
+// 		support.inlineBlockNeedsLayout = ( div.offsetWidth === 2 );
+//
+// 		// Check if elements with layout shrink-wrap their children
+// 		// (IE 6 does this)
+// 		div.style.display = "";
+// 		div.innerHTML = "<div style='width:4px;'></div>";
+// 		support.shrinkWrapBlocks = ( div.offsetWidth !== 2 );
+// 	}
+//
+// 	div.innerHTML = "<table><tr><td style='padding:0;border:0;display:none'></td><td>t</td></tr></table>";
+// 	tds = div.getElementsByTagName( "td" );
+//
+// 	// Check if table cells still have offsetWidth/Height when they are set
+// 	// to display:none and there are still other visible table cells in a
+// 	// table row; if so, offsetWidth/Height are not reliable for use when
+// 	// determining if an element has been hidden directly using
+// 	// display:none (it is still safe to use offsets if a parent element is
+// 	// hidden; don safety goggles and see bug #4512 for more information).
+// 	// (only IE 8 fails this test)
+// 	isSupported = ( tds[ 0 ].offsetHeight === 0 );
+//
+// 	tds[ 0 ].style.display = "";
+// 	tds[ 1 ].style.display = "none";
+//
+// 	// Check if empty table cells still have offsetWidth/Height
+// 	// (IE < 8 fail this test)
+// 	support.reliableHiddenOffsets = isSupported && ( tds[ 0 ].offsetHeight === 0 );
+// 	div.innerHTML = "";
+//
+// 	// Check if div with explicit width and no margin-right incorrectly
+// 	// gets computed margin-right based on width of container. For more
+// 	// info see bug #3333
+// 	// Fails in WebKit before Feb 2011 nightlies
+// 	// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
+// 	if ( document.defaultView && document.defaultView.getComputedStyle ) {
+// 		marginDiv = document.createElement( "div" );
+// 		marginDiv.style.width = "0";
+// 		marginDiv.style.marginRight = "0";
+// 		div.appendChild( marginDiv );
+// 		support.reliableMarginRight =
+// 			( parseInt( ( document.defaultView.getComputedStyle( marginDiv, null ) || { marginRight: 0 } ).marginRight, 10 ) || 0 ) === 0;
+// 	}
+//
+// 	// Remove the body element we added
+// 	testElement.innerHTML = "";
+// 	testElementParent.removeChild( testElement );
+//
+// 	// Technique from Juriy Zaytsev
+// 	// http://thinkweb2.com/projects/prototype/detecting-event-support-without-browser-sniffing/
+// 	// We only care about the case where non-standard event systems
+// 	// are used, namely in IE. Short-circuiting here helps us to
+// 	// avoid an eval call (in setAttribute) which can cause CSP
+// 	// to go haywire. See: https://developer.mozilla.org/en/Security/CSP
+// 	if ( div.attachEvent ) {
+// 		for( i in {
+// 			submit: 1,
+// 			change: 1,
+// 			focusin: 1
+// 		} ) {
+// 			eventName = "on" + i;
+// 			isSupported = ( eventName in div );
+// 			if ( !isSupported ) {
+// 				div.setAttribute( eventName, "return;" );
+// 				isSupported = ( typeof div[ eventName ] === "function" );
+// 			}
+// 			support[ i + "Bubbles" ] = isSupported;
+// 		}
+// 	}
+//
+// 	// Null connected elements to avoid leaks in IE
+// 	testElement = fragment = select = opt = body = marginDiv = div = input = null;
+//
+// 	return support;
+// })();
 
-	var div = document.createElement( "div" ),
-		documentElement = document.documentElement,
-		all,
-		a,
-		select,
-		opt,
-		input,
-		marginDiv,
-		support,
-		fragment,
-		body,
-		testElementParent,
-		testElement,
-		testElementStyle,
-		tds,
-		events,
-		eventName,
-		i,
-		isSupported;
-
-	// Preliminary tests
-	div.setAttribute("className", "t");
-	div.innerHTML = "   <link/><table></table><a href='/a' style='top:1px;float:left;opacity:.55;'>a</a><input type='checkbox'/>";
-
-
-	all = div.getElementsByTagName( "*" );
-	a = div.getElementsByTagName( "a" )[ 0 ];
-
-	// Can't get basic test support
-	if ( !all || !all.length || !a ) {
-		return {};
-	}
-
-	// First batch of supports tests
-	select = document.createElement( "select" );
-	opt = select.appendChild( document.createElement("option") );
-	input = div.getElementsByTagName( "input" )[ 0 ];
-
-	support = {
-		// IE strips leading whitespace when .innerHTML is used
-		leadingWhitespace: ( div.firstChild.nodeType === 3 ),
-
-		// Make sure that tbody elements aren't automatically inserted
-		// IE will insert them into empty tables
-		tbody: !div.getElementsByTagName( "tbody" ).length,
-
-		// Make sure that link elements get serialized correctly by innerHTML
-		// This requires a wrapper element in IE
-		htmlSerialize: !!div.getElementsByTagName( "link" ).length,
-
-		// Get the style information from getAttribute
-		// (IE uses .cssText instead)
-		style: /top/.test( a.getAttribute("style") ),
-
-		// Make sure that URLs aren't manipulated
-		// (IE normalizes it by default)
-		hrefNormalized: ( a.getAttribute( "href" ) === "/a" ),
-
-		// Make sure that element opacity exists
-		// (IE uses filter instead)
-		// Use a regex to work around a WebKit issue. See #5145
-		opacity: /^0.55$/.test( a.style.opacity ),
-
-		// Verify style float existence
-		// (IE uses styleFloat instead of cssFloat)
-		cssFloat: !!a.style.cssFloat,
-
-		// Make sure that if no value is specified for a checkbox
-		// that it defaults to "on".
-		// (WebKit defaults to "" instead)
-		checkOn: ( input.value === "on" ),
-
-		// Make sure that a selected-by-default option has a working selected property.
-		// (WebKit defaults to false instead of true, IE too, if it's in an optgroup)
-		optSelected: opt.selected,
-
-		// Test setAttribute on camelCase class. If it works, we need attrFixes when doing get/setAttribute (ie6/7)
-		getSetAttribute: div.className !== "t",
-
-		// Will be defined later
-		submitBubbles: true,
-		changeBubbles: true,
-		focusinBubbles: false,
-		deleteExpando: true,
-		noCloneEvent: true,
-		inlineBlockNeedsLayout: false,
-		shrinkWrapBlocks: false,
-		reliableMarginRight: true
-	};
-
-	// Make sure checked status is properly cloned
-	input.checked = true;
-	support.noCloneChecked = input.cloneNode( true ).checked;
-
-	// Make sure that the options inside disabled selects aren't marked as disabled
-	// (WebKit marks them as disabled)
-	select.disabled = true;
-	support.optDisabled = !opt.disabled;
-
-	// Test to see if it's possible to delete an expando from an element
-	// Fails in Internet Explorer
-	try {
-		delete div.test;
-	} catch( e ) {
-		support.deleteExpando = false;
-	}
-
-	if ( !div.addEventListener && div.attachEvent && div.fireEvent ) {
-		div.attachEvent( "onclick", function() {
-			// Cloning a node shouldn't copy over any
-			// bound event handlers (IE does this)
-			support.noCloneEvent = false;
-		});
-		div.cloneNode( true ).fireEvent( "onclick" );
-	}
-
-	// Check if a radio maintains it's value
-	// after being appended to the DOM
-	input = document.createElement("input");
-	input.value = "t";
-	input.setAttribute("type", "radio");
-	support.radioValue = input.value === "t";
-
-	input.setAttribute("checked", "checked");
-	div.appendChild( input );
-	fragment = document.createDocumentFragment();
-	fragment.appendChild( div.firstChild );
-
-	// WebKit doesn't clone checked state correctly in fragments
-	support.checkClone = fragment.cloneNode( true ).cloneNode( true ).lastChild.checked;
-
-	div.innerHTML = "";
-
-	// Figure out if the W3C box model works as expected
-	div.style.width = div.style.paddingLeft = "1px";
-
-	body = document.getElementsByTagName( "body" )[ 0 ];
-	// We use our own, invisible, body unless the body is already present
-	// in which case we use a div (#9239)
-	testElement = document.createElement( body ? "div" : "body" );
-	testElementStyle = {
-		visibility: "hidden",
-		width: 0,
-		height: 0,
-		border: 0,
-		margin: 0,
-		background: "none"
-	};
-	if ( body ) {
-		jQuery.extend( testElementStyle, {
-			position: "absolute",
-			left: "-1000px",
-			top: "-1000px"
-		});
-	}
-	for ( i in testElementStyle ) {
-		testElement.style[ i ] = testElementStyle[ i ];
-	}
-	testElement.appendChild( div );
-	testElementParent = body || documentElement;
-	testElementParent.insertBefore( testElement, testElementParent.firstChild );
-
-	// Check if a disconnected checkbox will retain its checked
-	// value of true after appended to the DOM (IE6/7)
-	support.appendChecked = input.checked;
-
-	support.boxModel = div.offsetWidth === 2;
-
-	if ( "zoom" in div.style ) {
-		// Check if natively block-level elements act like inline-block
-		// elements when setting their display to 'inline' and giving
-		// them layout
-		// (IE < 8 does this)
-		div.style.display = "inline";
-		div.style.zoom = 1;
-		support.inlineBlockNeedsLayout = ( div.offsetWidth === 2 );
-
-		// Check if elements with layout shrink-wrap their children
-		// (IE 6 does this)
-		div.style.display = "";
-		div.innerHTML = "<div style='width:4px;'></div>";
-		support.shrinkWrapBlocks = ( div.offsetWidth !== 2 );
-	}
-
-	div.innerHTML = "<table><tr><td style='padding:0;border:0;display:none'></td><td>t</td></tr></table>";
-	tds = div.getElementsByTagName( "td" );
-
-	// Check if table cells still have offsetWidth/Height when they are set
-	// to display:none and there are still other visible table cells in a
-	// table row; if so, offsetWidth/Height are not reliable for use when
-	// determining if an element has been hidden directly using
-	// display:none (it is still safe to use offsets if a parent element is
-	// hidden; don safety goggles and see bug #4512 for more information).
-	// (only IE 8 fails this test)
-	isSupported = ( tds[ 0 ].offsetHeight === 0 );
-
-	tds[ 0 ].style.display = "";
-	tds[ 1 ].style.display = "none";
-
-	// Check if empty table cells still have offsetWidth/Height
-	// (IE < 8 fail this test)
-	support.reliableHiddenOffsets = isSupported && ( tds[ 0 ].offsetHeight === 0 );
-	div.innerHTML = "";
-
-	// Check if div with explicit width and no margin-right incorrectly
-	// gets computed margin-right based on width of container. For more
-	// info see bug #3333
-	// Fails in WebKit before Feb 2011 nightlies
-	// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
-	if ( document.defaultView && document.defaultView.getComputedStyle ) {
-		marginDiv = document.createElement( "div" );
-		marginDiv.style.width = "0";
-		marginDiv.style.marginRight = "0";
-		div.appendChild( marginDiv );
-		support.reliableMarginRight =
-			( parseInt( ( document.defaultView.getComputedStyle( marginDiv, null ) || { marginRight: 0 } ).marginRight, 10 ) || 0 ) === 0;
-	}
-
-	// Remove the body element we added
-	testElement.innerHTML = "";
-	testElementParent.removeChild( testElement );
-
-	// Technique from Juriy Zaytsev
-	// http://thinkweb2.com/projects/prototype/detecting-event-support-without-browser-sniffing/
-	// We only care about the case where non-standard event systems
-	// are used, namely in IE. Short-circuiting here helps us to
-	// avoid an eval call (in setAttribute) which can cause CSP
-	// to go haywire. See: https://developer.mozilla.org/en/Security/CSP
-	if ( div.attachEvent ) {
-		for( i in {
-			submit: 1,
-			change: 1,
-			focusin: 1
-		} ) {
-			eventName = "on" + i;
-			isSupported = ( eventName in div );
-			if ( !isSupported ) {
-				div.setAttribute( eventName, "return;" );
-				isSupported = ( typeof div[ eventName ] === "function" );
-			}
-			support[ i + "Bubbles" ] = isSupported;
-		}
-	}
-
-	// Null connected elements to avoid leaks in IE
-	testElement = fragment = select = opt = body = marginDiv = div = input = null;
-
-	return support;
-})();
-
-// Keep track of boxModel
-jQuery.boxModel = jQuery.support.boxModel;
+// // Keep track of boxModel
+// jQuery.boxModel = jQuery.support.boxModel;
 
 
 
@@ -2460,102 +2460,102 @@ boolHook = {
 	}
 };
 
-// IE6/7 do not support getting/setting some attributes with get/setAttribute
-if ( !jQuery.support.getSetAttribute ) {
+// // IE6/7 do not support getting/setting some attributes with get/setAttribute
+// if ( !jQuery.support.getSetAttribute ) {
+//
+// 	// Use this for any attribute in IE6/7
+// 	// This fixes almost every IE6/7 issue
+// 	nodeHook = jQuery.valHooks.button = {
+// 		get: function( elem, name ) {
+// 			var ret;
+// 			ret = elem.getAttributeNode( name );
+// 			// Return undefined if nodeValue is empty string
+// 			return ret && ret.nodeValue !== "" ?
+// 				ret.nodeValue :
+// 				undefined;
+// 		},
+// 		set: function( elem, value, name ) {
+// 			// Set the existing or create a new attribute node
+// 			var ret = elem.getAttributeNode( name );
+// 			if ( !ret ) {
+// 				ret = document.createAttribute( name );
+// 				elem.setAttributeNode( ret );
+// 			}
+// 			return (ret.nodeValue = value + "");
+// 		}
+// 	};
+//
+// 	// Set width and height to auto instead of 0 on empty string( Bug #8150 )
+// 	// This is for removals
+// 	jQuery.each([ "width", "height" ], function( i, name ) {
+// 		jQuery.attrHooks[ name ] = jQuery.extend( jQuery.attrHooks[ name ], {
+// 			set: function( elem, value ) {
+// 				if ( value === "" ) {
+// 					elem.setAttribute( name, "auto" );
+// 					return value;
+// 				}
+// 			}
+// 		});
+// 	});
+// }
 
-	// Use this for any attribute in IE6/7
-	// This fixes almost every IE6/7 issue
-	nodeHook = jQuery.valHooks.button = {
-		get: function( elem, name ) {
-			var ret;
-			ret = elem.getAttributeNode( name );
-			// Return undefined if nodeValue is empty string
-			return ret && ret.nodeValue !== "" ?
-				ret.nodeValue :
-				undefined;
-		},
-		set: function( elem, value, name ) {
-			// Set the existing or create a new attribute node
-			var ret = elem.getAttributeNode( name );
-			if ( !ret ) {
-				ret = document.createAttribute( name );
-				elem.setAttributeNode( ret );
-			}
-			return (ret.nodeValue = value + "");
-		}
-	};
 
-	// Set width and height to auto instead of 0 on empty string( Bug #8150 )
-	// This is for removals
-	jQuery.each([ "width", "height" ], function( i, name ) {
-		jQuery.attrHooks[ name ] = jQuery.extend( jQuery.attrHooks[ name ], {
-			set: function( elem, value ) {
-				if ( value === "" ) {
-					elem.setAttribute( name, "auto" );
-					return value;
-				}
-			}
-		});
-	});
-}
-
-
-// Some attributes require a special call on IE
-if ( !jQuery.support.hrefNormalized ) {
-	jQuery.each([ "href", "src", "width", "height" ], function( i, name ) {
-		jQuery.attrHooks[ name ] = jQuery.extend( jQuery.attrHooks[ name ], {
-			get: function( elem ) {
-				var ret = elem.getAttribute( name, 2 );
-				return ret === null ? undefined : ret;
-			}
-		});
-	});
-}
-
-if ( !jQuery.support.style ) {
-	jQuery.attrHooks.style = {
-		get: function( elem ) {
-			// Return undefined in the case of empty string
-			// Normalize to lowercase since IE uppercases css property names
-			return elem.style.cssText.toLowerCase() || undefined;
-		},
-		set: function( elem, value ) {
-			return (elem.style.cssText = "" + value);
-		}
-	};
-}
-
-// Safari mis-reports the default selected property of an option
-// Accessing the parent's selectedIndex property fixes it
-if ( !jQuery.support.optSelected ) {
-	jQuery.propHooks.selected = jQuery.extend( jQuery.propHooks.selected, {
-		get: function( elem ) {
-			var parent = elem.parentNode;
-
-			if ( parent ) {
-				parent.selectedIndex;
-
-				// Make sure that it also works with optgroups, see #5701
-				if ( parent.parentNode ) {
-					parent.parentNode.selectedIndex;
-				}
-			}
-			return null;
-		}
-	});
-}
-
-// Radios and checkboxes getter/setter
-if ( !jQuery.support.checkOn ) {
-	jQuery.each([ "radio", "checkbox" ], function() {
-		jQuery.valHooks[ this ] = {
-			get: function( elem ) {
-				// Handle the case where in Webkit "" is returned instead of "on" if a value isn't specified
-				return elem.getAttribute("value") === null ? "on" : elem.value;
-			}
-		};
-	});
-}
+// // Some attributes require a special call on IE
+// if ( !jQuery.support.hrefNormalized ) {
+// 	jQuery.each([ "href", "src", "width", "height" ], function( i, name ) {
+// 		jQuery.attrHooks[ name ] = jQuery.extend( jQuery.attrHooks[ name ], {
+// 			get: function( elem ) {
+// 				var ret = elem.getAttribute( name, 2 );
+// 				return ret === null ? undefined : ret;
+// 			}
+// 		});
+// 	});
+// }
+//
+// if ( !jQuery.support.style ) {
+// 	jQuery.attrHooks.style = {
+// 		get: function( elem ) {
+// 			// Return undefined in the case of empty string
+// 			// Normalize to lowercase since IE uppercases css property names
+// 			return elem.style.cssText.toLowerCase() || undefined;
+// 		},
+// 		set: function( elem, value ) {
+// 			return (elem.style.cssText = "" + value);
+// 		}
+// 	};
+// }
+//
+// // Safari mis-reports the default selected property of an option
+// // Accessing the parent's selectedIndex property fixes it
+// if ( !jQuery.support.optSelected ) {
+// 	jQuery.propHooks.selected = jQuery.extend( jQuery.propHooks.selected, {
+// 		get: function( elem ) {
+// 			var parent = elem.parentNode;
+//
+// 			if ( parent ) {
+// 				parent.selectedIndex;
+//
+// 				// Make sure that it also works with optgroups, see #5701
+// 				if ( parent.parentNode ) {
+// 					parent.parentNode.selectedIndex;
+// 				}
+// 			}
+// 			return null;
+// 		}
+// 	});
+// }
+//
+// // Radios and checkboxes getter/setter
+// if ( !jQuery.support.checkOn ) {
+// 	jQuery.each([ "radio", "checkbox" ], function() {
+// 		jQuery.valHooks[ this ] = {
+// 			get: function( elem ) {
+// 				// Handle the case where in Webkit "" is returned instead of "on" if a value isn't specified
+// 				return elem.getAttribute("value") === null ? "on" : elem.value;
+// 			}
+// 		};
+// 	});
+// }
 jQuery.each([ "radio", "checkbox" ], function() {
 	jQuery.valHooks[ this ] = jQuery.extend( jQuery.valHooks[ this ], {
 		set: function( elem, value ) {
@@ -3120,17 +3120,17 @@ jQuery.event = {
 	}
 };
 
-jQuery.removeEvent = document.removeEventListener ?
-	function( elem, type, handle ) {
-		if ( elem.removeEventListener ) {
-			elem.removeEventListener( type, handle, false );
-		}
-	} :
-	function( elem, type, handle ) {
-		if ( elem.detachEvent ) {
-			elem.detachEvent( "on" + type, handle );
-		}
-	};
+// jQuery.removeEvent = document.removeEventListener ?
+// 	function( elem, type, handle ) {
+// 		if ( elem.removeEventListener ) {
+// 			elem.removeEventListener( type, handle, false );
+// 		}
+// 	} :
+// 	function( elem, type, handle ) {
+// 		if ( elem.detachEvent ) {
+// 			elem.detachEvent( "on" + type, handle );
+// 		}
+// 	};
 
 jQuery.Event = function( src, props ) {
 	// Allow instantiation without the 'new' keyword
@@ -3264,154 +3264,154 @@ jQuery.each({
 	};
 });
 
-// submit delegation
-if ( !jQuery.support.submitBubbles ) {
-
-	jQuery.event.special.submit = {
-		setup: function( data, namespaces ) {
-			if ( !jQuery.nodeName( this, "form" ) ) {
-				jQuery.event.add(this, "click.specialSubmit", function( e ) {
-					// Avoid triggering error on non-existent type attribute in IE VML (#7071)
-					var elem = e.target,
-						type = jQuery.nodeName( elem, "input" ) || jQuery.nodeName( elem, "button" ) ? elem.type : "";
-
-					if ( (type === "submit" || type === "image") && jQuery( elem ).closest("form").length ) {
-						trigger( "submit", this, arguments );
-					}
-				});
-
-				jQuery.event.add(this, "keypress.specialSubmit", function( e ) {
-					var elem = e.target,
-						type = jQuery.nodeName( elem, "input" ) || jQuery.nodeName( elem, "button" ) ? elem.type : "";
-
-					if ( (type === "text" || type === "password") && jQuery( elem ).closest("form").length && e.keyCode === 13 ) {
-						trigger( "submit", this, arguments );
-					}
-				});
-
-			} else {
-				return false;
-			}
-		},
-
-		teardown: function( namespaces ) {
-			jQuery.event.remove( this, ".specialSubmit" );
-		}
-	};
-
-}
-
-// change delegation, happens here so we have bind.
-if ( !jQuery.support.changeBubbles ) {
-
-	var changeFilters,
-
-	getVal = function( elem ) {
-		var type = jQuery.nodeName( elem, "input" ) ? elem.type : "",
-			val = elem.value;
-
-		if ( type === "radio" || type === "checkbox" ) {
-			val = elem.checked;
-
-		} else if ( type === "select-multiple" ) {
-			val = elem.selectedIndex > -1 ?
-				jQuery.map( elem.options, function( elem ) {
-					return elem.selected;
-				}).join("-") :
-				"";
-
-		} else if ( jQuery.nodeName( elem, "select" ) ) {
-			val = elem.selectedIndex;
-		}
-
-		return val;
-	},
-
-	testChange = function testChange( e ) {
-		var elem = e.target, data, val;
-
-		if ( !rformElems.test( elem.nodeName ) || elem.readOnly ) {
-			return;
-		}
-
-		data = jQuery._data( elem, "_change_data" );
-		val = getVal(elem);
-
-		// the current data will be also retrieved by beforeactivate
-		if ( e.type !== "focusout" || elem.type !== "radio" ) {
-			jQuery._data( elem, "_change_data", val );
-		}
-
-		if ( data === undefined || val === data ) {
-			return;
-		}
-
-		if ( data != null || val ) {
-			e.type = "change";
-			e.liveFired = undefined;
-			jQuery.event.trigger( e, arguments[1], elem );
-		}
-	};
-
-	jQuery.event.special.change = {
-		filters: {
-			focusout: testChange,
-
-			beforedeactivate: testChange,
-
-			click: function( e ) {
-				var elem = e.target, type = jQuery.nodeName( elem, "input" ) ? elem.type : "";
-
-				if ( type === "radio" || type === "checkbox" || jQuery.nodeName( elem, "select" ) ) {
-					testChange.call( this, e );
-				}
-			},
-
-			// Change has to be called before submit
-			// Keydown will be called before keypress, which is used in submit-event delegation
-			keydown: function( e ) {
-				var elem = e.target, type = jQuery.nodeName( elem, "input" ) ? elem.type : "";
-
-				if ( (e.keyCode === 13 && !jQuery.nodeName( elem, "textarea" ) ) ||
-					(e.keyCode === 32 && (type === "checkbox" || type === "radio")) ||
-					type === "select-multiple" ) {
-					testChange.call( this, e );
-				}
-			},
-
-			// Beforeactivate happens also before the previous element is blurred
-			// with this event you can't trigger a change event, but you can store
-			// information
-			beforeactivate: function( e ) {
-				var elem = e.target;
-				jQuery._data( elem, "_change_data", getVal(elem) );
-			}
-		},
-
-		setup: function( data, namespaces ) {
-			if ( this.type === "file" ) {
-				return false;
-			}
-
-			for ( var type in changeFilters ) {
-				jQuery.event.add( this, type + ".specialChange", changeFilters[type] );
-			}
-
-			return rformElems.test( this.nodeName );
-		},
-
-		teardown: function( namespaces ) {
-			jQuery.event.remove( this, ".specialChange" );
-
-			return rformElems.test( this.nodeName );
-		}
-	};
-
-	changeFilters = jQuery.event.special.change.filters;
-
-	// Handle when the input is .focus()'d
-	changeFilters.focus = changeFilters.beforeactivate;
-}
+// // submit delegation
+// if ( !jQuery.support.submitBubbles ) {
+//
+// 	jQuery.event.special.submit = {
+// 		setup: function( data, namespaces ) {
+// 			if ( !jQuery.nodeName( this, "form" ) ) {
+// 				jQuery.event.add(this, "click.specialSubmit", function( e ) {
+// 					// Avoid triggering error on non-existent type attribute in IE VML (#7071)
+// 					var elem = e.target,
+// 						type = jQuery.nodeName( elem, "input" ) || jQuery.nodeName( elem, "button" ) ? elem.type : "";
+//
+// 					if ( (type === "submit" || type === "image") && jQuery( elem ).closest("form").length ) {
+// 						trigger( "submit", this, arguments );
+// 					}
+// 				});
+//
+// 				jQuery.event.add(this, "keypress.specialSubmit", function( e ) {
+// 					var elem = e.target,
+// 						type = jQuery.nodeName( elem, "input" ) || jQuery.nodeName( elem, "button" ) ? elem.type : "";
+//
+// 					if ( (type === "text" || type === "password") && jQuery( elem ).closest("form").length && e.keyCode === 13 ) {
+// 						trigger( "submit", this, arguments );
+// 					}
+// 				});
+//
+// 			} else {
+// 				return false;
+// 			}
+// 		},
+//
+// 		teardown: function( namespaces ) {
+// 			jQuery.event.remove( this, ".specialSubmit" );
+// 		}
+// 	};
+//
+// }
+//
+// // change delegation, happens here so we have bind.
+// if ( !jQuery.support.changeBubbles ) {
+//
+// 	var changeFilters,
+//
+// 	getVal = function( elem ) {
+// 		var type = jQuery.nodeName( elem, "input" ) ? elem.type : "",
+// 			val = elem.value;
+//
+// 		if ( type === "radio" || type === "checkbox" ) {
+// 			val = elem.checked;
+//
+// 		} else if ( type === "select-multiple" ) {
+// 			val = elem.selectedIndex > -1 ?
+// 				jQuery.map( elem.options, function( elem ) {
+// 					return elem.selected;
+// 				}).join("-") :
+// 				"";
+//
+// 		} else if ( jQuery.nodeName( elem, "select" ) ) {
+// 			val = elem.selectedIndex;
+// 		}
+//
+// 		return val;
+// 	},
+//
+// 	testChange = function testChange( e ) {
+// 		var elem = e.target, data, val;
+//
+// 		if ( !rformElems.test( elem.nodeName ) || elem.readOnly ) {
+// 			return;
+// 		}
+//
+// 		data = jQuery._data( elem, "_change_data" );
+// 		val = getVal(elem);
+//
+// 		// the current data will be also retrieved by beforeactivate
+// 		if ( e.type !== "focusout" || elem.type !== "radio" ) {
+// 			jQuery._data( elem, "_change_data", val );
+// 		}
+//
+// 		if ( data === undefined || val === data ) {
+// 			return;
+// 		}
+//
+// 		if ( data != null || val ) {
+// 			e.type = "change";
+// 			e.liveFired = undefined;
+// 			jQuery.event.trigger( e, arguments[1], elem );
+// 		}
+// 	};
+//
+// 	jQuery.event.special.change = {
+// 		filters: {
+// 			focusout: testChange,
+//
+// 			beforedeactivate: testChange,
+//
+// 			click: function( e ) {
+// 				var elem = e.target, type = jQuery.nodeName( elem, "input" ) ? elem.type : "";
+//
+// 				if ( type === "radio" || type === "checkbox" || jQuery.nodeName( elem, "select" ) ) {
+// 					testChange.call( this, e );
+// 				}
+// 			},
+//
+// 			// Change has to be called before submit
+// 			// Keydown will be called before keypress, which is used in submit-event delegation
+// 			keydown: function( e ) {
+// 				var elem = e.target, type = jQuery.nodeName( elem, "input" ) ? elem.type : "";
+//
+// 				if ( (e.keyCode === 13 && !jQuery.nodeName( elem, "textarea" ) ) ||
+// 					(e.keyCode === 32 && (type === "checkbox" || type === "radio")) ||
+// 					type === "select-multiple" ) {
+// 					testChange.call( this, e );
+// 				}
+// 			},
+//
+// 			// Beforeactivate happens also before the previous element is blurred
+// 			// with this event you can't trigger a change event, but you can store
+// 			// information
+// 			beforeactivate: function( e ) {
+// 				var elem = e.target;
+// 				jQuery._data( elem, "_change_data", getVal(elem) );
+// 			}
+// 		},
+//
+// 		setup: function( data, namespaces ) {
+// 			if ( this.type === "file" ) {
+// 				return false;
+// 			}
+//
+// 			for ( var type in changeFilters ) {
+// 				jQuery.event.add( this, type + ".specialChange", changeFilters[type] );
+// 			}
+//
+// 			return rformElems.test( this.nodeName );
+// 		},
+//
+// 		teardown: function( namespaces ) {
+// 			jQuery.event.remove( this, ".specialChange" );
+//
+// 			return rformElems.test( this.nodeName );
+// 		}
+// 	};
+//
+// 	changeFilters = jQuery.event.special.change.filters;
+//
+// 	// Handle when the input is .focus()'d
+// 	changeFilters.focus = changeFilters.beforeactivate;
+// }
 
 function trigger( type, elem, args ) {
 	// Piggyback on a donor event to simulate a different one.
@@ -3428,39 +3428,39 @@ function trigger( type, elem, args ) {
 	}
 }
 
-// Create "bubbling" focus and blur events
-if ( !jQuery.support.focusinBubbles ) {
-	jQuery.each({ focus: "focusin", blur: "focusout" }, function( orig, fix ) {
-
-		// Attach a single capturing handler while someone wants focusin/focusout
-		var attaches = 0;
-
-		jQuery.event.special[ fix ] = {
-			setup: function() {
-				if ( attaches++ === 0 ) {
-					document.addEventListener( orig, handler, true );
-				}
-			},
-			teardown: function() {
-				if ( --attaches === 0 ) {
-					document.removeEventListener( orig, handler, true );
-				}
-			}
-		};
-
-		function handler( donor ) {
-			// Donor event is always a native one; fix it and switch its type.
-			// Let focusin/out handler cancel the donor focus/blur event.
-			var e = jQuery.event.fix( donor );
-			e.type = fix;
-			e.originalEvent = {};
-			jQuery.event.trigger( e, null, e.target );
-			if ( e.isDefaultPrevented() ) {
-				donor.preventDefault();
-			}
-		}
-	});
-}
+// // Create "bubbling" focus and blur events
+// if ( !jQuery.support.focusinBubbles ) {
+// 	jQuery.each({ focus: "focusin", blur: "focusout" }, function( orig, fix ) {
+//
+// 		// Attach a single capturing handler while someone wants focusin/focusout
+// 		var attaches = 0;
+//
+// 		jQuery.event.special[ fix ] = {
+// 			setup: function() {
+// 				if ( attaches++ === 0 ) {
+// 					document.addEventListener( orig, handler, true );
+// 				}
+// 			},
+// 			teardown: function() {
+// 				if ( --attaches === 0 ) {
+// 					document.removeEventListener( orig, handler, true );
+// 				}
+// 			}
+// 		};
+//
+// 		function handler( donor ) {
+// 			// Donor event is always a native one; fix it and switch its type.
+// 			// Let focusin/out handler cancel the donor focus/blur event.
+// 			var e = jQuery.event.fix( donor );
+// 			e.type = fix;
+// 			e.originalEvent = {};
+// 			jQuery.event.trigger( e, null, e.target );
+// 			if ( e.isDefaultPrevented() ) {
+// 				donor.preventDefault();
+// 			}
+// 		}
+// 	});
+// }
 
 jQuery.each(["bind", "one"], function( i, name ) {
 	jQuery.fn[ name ] = function( type, data, fn ) {
@@ -4674,99 +4674,99 @@ try {
 
 var sortOrder, siblingCheck;
 
-if ( document.documentElement.compareDocumentPosition ) {
-	sortOrder = function( a, b ) {
-		if ( a === b ) {
-			hasDuplicate = true;
-			return 0;
-		}
-
-		if ( !a.compareDocumentPosition || !b.compareDocumentPosition ) {
-			return a.compareDocumentPosition ? -1 : 1;
-		}
-
-		return a.compareDocumentPosition(b) & 4 ? -1 : 1;
-	};
-
-} else {
-	sortOrder = function( a, b ) {
-		// The nodes are identical, we can exit early
-		if ( a === b ) {
-			hasDuplicate = true;
-			return 0;
-
-		// Fallback to using sourceIndex (in IE) if it's available on both nodes
-		} else if ( a.sourceIndex && b.sourceIndex ) {
-			return a.sourceIndex - b.sourceIndex;
-		}
-
-		var al, bl,
-			ap = [],
-			bp = [],
-			aup = a.parentNode,
-			bup = b.parentNode,
-			cur = aup;
-
-		// If the nodes are siblings (or identical) we can do a quick check
-		if ( aup === bup ) {
-			return siblingCheck( a, b );
-
-		// If no parents were found then the nodes are disconnected
-		} else if ( !aup ) {
-			return -1;
-
-		} else if ( !bup ) {
-			return 1;
-		}
-
-		// Otherwise they're somewhere else in the tree so we need
-		// to build up a full list of the parentNodes for comparison
-		while ( cur ) {
-			ap.unshift( cur );
-			cur = cur.parentNode;
-		}
-
-		cur = bup;
-
-		while ( cur ) {
-			bp.unshift( cur );
-			cur = cur.parentNode;
-		}
-
-		al = ap.length;
-		bl = bp.length;
-
-		// Start walking down the tree looking for a discrepancy
-		for ( var i = 0; i < al && i < bl; i++ ) {
-			if ( ap[i] !== bp[i] ) {
-				return siblingCheck( ap[i], bp[i] );
-			}
-		}
-
-		// We ended someplace up the tree so do a sibling check
-		return i === al ?
-			siblingCheck( a, bp[i], -1 ) :
-			siblingCheck( ap[i], b, 1 );
-	};
-
-	siblingCheck = function( a, b, ret ) {
-		if ( a === b ) {
-			return ret;
-		}
-
-		var cur = a.nextSibling;
-
-		while ( cur ) {
-			if ( cur === b ) {
-				return -1;
-			}
-
-			cur = cur.nextSibling;
-		}
-
-		return 1;
-	};
-}
+// if ( document.documentElement.compareDocumentPosition ) {
+// 	sortOrder = function( a, b ) {
+// 		if ( a === b ) {
+// 			hasDuplicate = true;
+// 			return 0;
+// 		}
+//
+// 		if ( !a.compareDocumentPosition || !b.compareDocumentPosition ) {
+// 			return a.compareDocumentPosition ? -1 : 1;
+// 		}
+//
+// 		return a.compareDocumentPosition(b) & 4 ? -1 : 1;
+// 	};
+//
+// } else {
+// 	sortOrder = function( a, b ) {
+// 		// The nodes are identical, we can exit early
+// 		if ( a === b ) {
+// 			hasDuplicate = true;
+// 			return 0;
+//
+// 		// Fallback to using sourceIndex (in IE) if it's available on both nodes
+// 		} else if ( a.sourceIndex && b.sourceIndex ) {
+// 			return a.sourceIndex - b.sourceIndex;
+// 		}
+//
+// 		var al, bl,
+// 			ap = [],
+// 			bp = [],
+// 			aup = a.parentNode,
+// 			bup = b.parentNode,
+// 			cur = aup;
+//
+// 		// If the nodes are siblings (or identical) we can do a quick check
+// 		if ( aup === bup ) {
+// 			return siblingCheck( a, b );
+//
+// 		// If no parents were found then the nodes are disconnected
+// 		} else if ( !aup ) {
+// 			return -1;
+//
+// 		} else if ( !bup ) {
+// 			return 1;
+// 		}
+//
+// 		// Otherwise they're somewhere else in the tree so we need
+// 		// to build up a full list of the parentNodes for comparison
+// 		while ( cur ) {
+// 			ap.unshift( cur );
+// 			cur = cur.parentNode;
+// 		}
+//
+// 		cur = bup;
+//
+// 		while ( cur ) {
+// 			bp.unshift( cur );
+// 			cur = cur.parentNode;
+// 		}
+//
+// 		al = ap.length;
+// 		bl = bp.length;
+//
+// 		// Start walking down the tree looking for a discrepancy
+// 		for ( var i = 0; i < al && i < bl; i++ ) {
+// 			if ( ap[i] !== bp[i] ) {
+// 				return siblingCheck( ap[i], bp[i] );
+// 			}
+// 		}
+//
+// 		// We ended someplace up the tree so do a sibling check
+// 		return i === al ?
+// 			siblingCheck( a, bp[i], -1 ) :
+// 			siblingCheck( ap[i], b, 1 );
+// 	};
+//
+// 	siblingCheck = function( a, b, ret ) {
+// 		if ( a === b ) {
+// 			return ret;
+// 		}
+//
+// 		var cur = a.nextSibling;
+//
+// 		while ( cur ) {
+// 			if ( cur === b ) {
+// 				return -1;
+// 			}
+//
+// 			cur = cur.nextSibling;
+// 		}
+//
+// 		return 1;
+// 	};
+// }
 
 // Utility function for retreiving the text value of an array of DOM nodes
 Sizzle.getText = function( elems ) {
@@ -4788,272 +4788,272 @@ Sizzle.getText = function( elems ) {
 	return ret;
 };
 
-// Check to see if the browser returns elements by name when
-// querying by getElementById (and provide a workaround)
-(function(){
-	// We're going to inject a fake input element with a specified name
-	var form = document.createElement("div"),
-		id = "script" + (new Date()).getTime(),
-		root = document.documentElement;
+// // Check to see if the browser returns elements by name when
+// // querying by getElementById (and provide a workaround)
+// (function(){
+// 	// We're going to inject a fake input element with a specified name
+// 	var form = document.createElement("div"),
+// 		id = "script" + (new Date()).getTime(),
+// 		root = document.documentElement;
+//
+// 	form.innerHTML = "<a name='" + id + "'/>";
+//
+// 	// Inject it into the root element, check its status, and remove it quickly
+// 	root.insertBefore( form, root.firstChild );
+//
+// 	// The workaround has to do additional checks after a getElementById
+// 	// Which slows things down for other browsers (hence the branching)
+// 	if ( document.getElementById( id ) ) {
+// 		Expr.find.ID = function( match, context, isXML ) {
+// 			if ( typeof context.getElementById !== "undefined" && !isXML ) {
+// 				var m = context.getElementById(match[1]);
+//
+// 				return m ?
+// 					m.id === match[1] || typeof m.getAttributeNode !== "undefined" && m.getAttributeNode("id").nodeValue === match[1] ?
+// 						[m] :
+// 						undefined :
+// 					[];
+// 			}
+// 		};
+//
+// 		Expr.filter.ID = function( elem, match ) {
+// 			var node = typeof elem.getAttributeNode !== "undefined" && elem.getAttributeNode("id");
+//
+// 			return elem.nodeType === 1 && node && node.nodeValue === match;
+// 		};
+// 	}
+//
+// 	root.removeChild( form );
+//
+// 	// release memory in IE
+// 	root = form = null;
+// })();
 
-	form.innerHTML = "<a name='" + id + "'/>";
+// (function(){
+// 	// Check to see if the browser returns only elements
+// 	// when doing getElementsByTagName("*")
+//
+// 	// Create a fake element
+// 	var div = document.createElement("div");
+// 	div.appendChild( document.createComment("") );
+//
+// 	// Make sure no comments are found
+// 	if ( div.getElementsByTagName("*").length > 0 ) {
+// 		Expr.find.TAG = function( match, context ) {
+// 			var results = context.getElementsByTagName( match[1] );
+//
+// 			// Filter out possible comments
+// 			if ( match[1] === "*" ) {
+// 				var tmp = [];
+//
+// 				for ( var i = 0; results[i]; i++ ) {
+// 					if ( results[i].nodeType === 1 ) {
+// 						tmp.push( results[i] );
+// 					}
+// 				}
+//
+// 				results = tmp;
+// 			}
+//
+// 			return results;
+// 		};
+// 	}
+//
+// 	// Check to see if an attribute returns normalized href attributes
+// 	div.innerHTML = "<a href='#'></a>";
+//
+// 	if ( div.firstChild && typeof div.firstChild.getAttribute !== "undefined" &&
+// 			div.firstChild.getAttribute("href") !== "#" ) {
+//
+// 		Expr.attrHandle.href = function( elem ) {
+// 			return elem.getAttribute( "href", 2 );
+// 		};
+// 	}
+//
+// 	// release memory in IE
+// 	div = null;
+// })();
 
-	// Inject it into the root element, check its status, and remove it quickly
-	root.insertBefore( form, root.firstChild );
+// if ( document.querySelectorAll ) {
+// 	(function(){
+// 		var oldSizzle = Sizzle,
+// 			div = document.createElement("div"),
+// 			id = "__sizzle__";
+//
+// 		div.innerHTML = "<p class='TEST'></p>";
+//
+// 		// Safari can't handle uppercase or unicode characters when
+// 		// in quirks mode.
+// 		if ( div.querySelectorAll && div.querySelectorAll(".TEST").length === 0 ) {
+// 			return;
+// 		}
+//
+// 		Sizzle = function( query, context, extra, seed ) {
+// 			context = context || document;
+//
+// 			// Only use querySelectorAll on non-XML documents
+// 			// (ID selectors don't work in non-HTML documents)
+// 			if ( !seed && !Sizzle.isXML(context) ) {
+// 				// See if we find a selector to speed up
+// 				var match = /^(\w+$)|^\.([\w\-]+$)|^#([\w\-]+$)/.exec( query );
+//
+// 				if ( match && (context.nodeType === 1 || context.nodeType === 9) ) {
+// 					// Speed-up: Sizzle("TAG")
+// 					if ( match[1] ) {
+// 						return makeArray( context.getElementsByTagName( query ), extra );
+//
+// 					// Speed-up: Sizzle(".CLASS")
+// 					} else if ( match[2] && Expr.find.CLASS && context.getElementsByClassName ) {
+// 						return makeArray( context.getElementsByClassName( match[2] ), extra );
+// 					}
+// 				}
+//
+// 				if ( context.nodeType === 9 ) {
+// 					// Speed-up: Sizzle("body")
+// 					// The body element only exists once, optimize finding it
+// 					if ( query === "body" && context.body ) {
+// 						return makeArray( [ context.body ], extra );
+//
+// 					// Speed-up: Sizzle("#ID")
+// 					} else if ( match && match[3] ) {
+// 						var elem = context.getElementById( match[3] );
+//
+// 						// Check parentNode to catch when Blackberry 4.6 returns
+// 						// nodes that are no longer in the document #6963
+// 						if ( elem && elem.parentNode ) {
+// 							// Handle the case where IE and Opera return items
+// 							// by name instead of ID
+// 							if ( elem.id === match[3] ) {
+// 								return makeArray( [ elem ], extra );
+// 							}
+//
+// 						} else {
+// 							return makeArray( [], extra );
+// 						}
+// 					}
+//
+// 					try {
+// 						return makeArray( context.querySelectorAll(query), extra );
+// 					} catch(qsaError) {}
+//
+// 				// qSA works strangely on Element-rooted queries
+// 				// We can work around this by specifying an extra ID on the root
+// 				// and working up from there (Thanks to Andrew Dupont for the technique)
+// 				// IE 8 doesn't work on object elements
+// 				} else if ( context.nodeType === 1 && context.nodeName.toLowerCase() !== "object" ) {
+// 					var oldContext = context,
+// 						old = context.getAttribute( "id" ),
+// 						nid = old || id,
+// 						hasParent = context.parentNode,
+// 						relativeHierarchySelector = /^\s*[+~]/.test( query );
+//
+// 					if ( !old ) {
+// 						context.setAttribute( "id", nid );
+// 					} else {
+// 						nid = nid.replace( /'/g, "\\$&" );
+// 					}
+// 					if ( relativeHierarchySelector && hasParent ) {
+// 						context = context.parentNode;
+// 					}
+//
+// 					try {
+// 						if ( !relativeHierarchySelector || hasParent ) {
+// 							return makeArray( context.querySelectorAll( "[id='" + nid + "'] " + query ), extra );
+// 						}
+//
+// 					} catch(pseudoError) {
+// 					} finally {
+// 						if ( !old ) {
+// 							oldContext.removeAttribute( "id" );
+// 						}
+// 					}
+// 				}
+// 			}
+//
+// 			return oldSizzle(query, context, extra, seed);
+// 		};
+//
+// 		for ( var prop in oldSizzle ) {
+// 			Sizzle[ prop ] = oldSizzle[ prop ];
+// 		}
+//
+// 		// release memory in IE
+// 		div = null;
+// 	})();
+// }
 
-	// The workaround has to do additional checks after a getElementById
-	// Which slows things down for other browsers (hence the branching)
-	if ( document.getElementById( id ) ) {
-		Expr.find.ID = function( match, context, isXML ) {
-			if ( typeof context.getElementById !== "undefined" && !isXML ) {
-				var m = context.getElementById(match[1]);
+// (function(){
+// 	var html = document.documentElement,
+// 		matches = html.matchesSelector || html.mozMatchesSelector || html.webkitMatchesSelector || html.msMatchesSelector;
+//
+// 	if ( matches ) {
+// 		// Check to see if it's possible to do matchesSelector
+// 		// on a disconnected node (IE 9 fails this)
+// 		var disconnectedMatch = !matches.call( document.createElement( "div" ), "div" ),
+// 			pseudoWorks = false;
+//
+// 		try {
+// 			// This should fail with an exception
+// 			// Gecko does not error, returns false instead
+// 			matches.call( document.documentElement, "[test!='']:sizzle" );
+//
+// 		} catch( pseudoError ) {
+// 			pseudoWorks = true;
+// 		}
+//
+// 		Sizzle.matchesSelector = function( node, expr ) {
+// 			// Make sure that attribute selectors are quoted
+// 			expr = expr.replace(/\=\s*([^'"\]]*)\s*\]/g, "='$1']");
+//
+// 			if ( !Sizzle.isXML( node ) ) {
+// 				try {
+// 					if ( pseudoWorks || !Expr.match.PSEUDO.test( expr ) && !/!=/.test( expr ) ) {
+// 						var ret = matches.call( node, expr );
+//
+// 						// IE 9's matchesSelector returns false on disconnected nodes
+// 						if ( ret || !disconnectedMatch ||
+// 								// As well, disconnected nodes are said to be in a document
+// 								// fragment in IE 9, so check for that
+// 								node.document && node.document.nodeType !== 11 ) {
+// 							return ret;
+// 						}
+// 					}
+// 				} catch(e) {}
+// 			}
+//
+// 			return Sizzle(expr, null, null, [node]).length > 0;
+// 		};
+// 	}
+// })();
 
-				return m ?
-					m.id === match[1] || typeof m.getAttributeNode !== "undefined" && m.getAttributeNode("id").nodeValue === match[1] ?
-						[m] :
-						undefined :
-					[];
-			}
-		};
-
-		Expr.filter.ID = function( elem, match ) {
-			var node = typeof elem.getAttributeNode !== "undefined" && elem.getAttributeNode("id");
-
-			return elem.nodeType === 1 && node && node.nodeValue === match;
-		};
-	}
-
-	root.removeChild( form );
-
-	// release memory in IE
-	root = form = null;
-})();
-
-(function(){
-	// Check to see if the browser returns only elements
-	// when doing getElementsByTagName("*")
-
-	// Create a fake element
-	var div = document.createElement("div");
-	div.appendChild( document.createComment("") );
-
-	// Make sure no comments are found
-	if ( div.getElementsByTagName("*").length > 0 ) {
-		Expr.find.TAG = function( match, context ) {
-			var results = context.getElementsByTagName( match[1] );
-
-			// Filter out possible comments
-			if ( match[1] === "*" ) {
-				var tmp = [];
-
-				for ( var i = 0; results[i]; i++ ) {
-					if ( results[i].nodeType === 1 ) {
-						tmp.push( results[i] );
-					}
-				}
-
-				results = tmp;
-			}
-
-			return results;
-		};
-	}
-
-	// Check to see if an attribute returns normalized href attributes
-	div.innerHTML = "<a href='#'></a>";
-
-	if ( div.firstChild && typeof div.firstChild.getAttribute !== "undefined" &&
-			div.firstChild.getAttribute("href") !== "#" ) {
-
-		Expr.attrHandle.href = function( elem ) {
-			return elem.getAttribute( "href", 2 );
-		};
-	}
-
-	// release memory in IE
-	div = null;
-})();
-
-if ( document.querySelectorAll ) {
-	(function(){
-		var oldSizzle = Sizzle,
-			div = document.createElement("div"),
-			id = "__sizzle__";
-
-		div.innerHTML = "<p class='TEST'></p>";
-
-		// Safari can't handle uppercase or unicode characters when
-		// in quirks mode.
-		if ( div.querySelectorAll && div.querySelectorAll(".TEST").length === 0 ) {
-			return;
-		}
-
-		Sizzle = function( query, context, extra, seed ) {
-			context = context || document;
-
-			// Only use querySelectorAll on non-XML documents
-			// (ID selectors don't work in non-HTML documents)
-			if ( !seed && !Sizzle.isXML(context) ) {
-				// See if we find a selector to speed up
-				var match = /^(\w+$)|^\.([\w\-]+$)|^#([\w\-]+$)/.exec( query );
-
-				if ( match && (context.nodeType === 1 || context.nodeType === 9) ) {
-					// Speed-up: Sizzle("TAG")
-					if ( match[1] ) {
-						return makeArray( context.getElementsByTagName( query ), extra );
-
-					// Speed-up: Sizzle(".CLASS")
-					} else if ( match[2] && Expr.find.CLASS && context.getElementsByClassName ) {
-						return makeArray( context.getElementsByClassName( match[2] ), extra );
-					}
-				}
-
-				if ( context.nodeType === 9 ) {
-					// Speed-up: Sizzle("body")
-					// The body element only exists once, optimize finding it
-					if ( query === "body" && context.body ) {
-						return makeArray( [ context.body ], extra );
-
-					// Speed-up: Sizzle("#ID")
-					} else if ( match && match[3] ) {
-						var elem = context.getElementById( match[3] );
-
-						// Check parentNode to catch when Blackberry 4.6 returns
-						// nodes that are no longer in the document #6963
-						if ( elem && elem.parentNode ) {
-							// Handle the case where IE and Opera return items
-							// by name instead of ID
-							if ( elem.id === match[3] ) {
-								return makeArray( [ elem ], extra );
-							}
-
-						} else {
-							return makeArray( [], extra );
-						}
-					}
-
-					try {
-						return makeArray( context.querySelectorAll(query), extra );
-					} catch(qsaError) {}
-
-				// qSA works strangely on Element-rooted queries
-				// We can work around this by specifying an extra ID on the root
-				// and working up from there (Thanks to Andrew Dupont for the technique)
-				// IE 8 doesn't work on object elements
-				} else if ( context.nodeType === 1 && context.nodeName.toLowerCase() !== "object" ) {
-					var oldContext = context,
-						old = context.getAttribute( "id" ),
-						nid = old || id,
-						hasParent = context.parentNode,
-						relativeHierarchySelector = /^\s*[+~]/.test( query );
-
-					if ( !old ) {
-						context.setAttribute( "id", nid );
-					} else {
-						nid = nid.replace( /'/g, "\\$&" );
-					}
-					if ( relativeHierarchySelector && hasParent ) {
-						context = context.parentNode;
-					}
-
-					try {
-						if ( !relativeHierarchySelector || hasParent ) {
-							return makeArray( context.querySelectorAll( "[id='" + nid + "'] " + query ), extra );
-						}
-
-					} catch(pseudoError) {
-					} finally {
-						if ( !old ) {
-							oldContext.removeAttribute( "id" );
-						}
-					}
-				}
-			}
-
-			return oldSizzle(query, context, extra, seed);
-		};
-
-		for ( var prop in oldSizzle ) {
-			Sizzle[ prop ] = oldSizzle[ prop ];
-		}
-
-		// release memory in IE
-		div = null;
-	})();
-}
-
-(function(){
-	var html = document.documentElement,
-		matches = html.matchesSelector || html.mozMatchesSelector || html.webkitMatchesSelector || html.msMatchesSelector;
-
-	if ( matches ) {
-		// Check to see if it's possible to do matchesSelector
-		// on a disconnected node (IE 9 fails this)
-		var disconnectedMatch = !matches.call( document.createElement( "div" ), "div" ),
-			pseudoWorks = false;
-
-		try {
-			// This should fail with an exception
-			// Gecko does not error, returns false instead
-			matches.call( document.documentElement, "[test!='']:sizzle" );
-
-		} catch( pseudoError ) {
-			pseudoWorks = true;
-		}
-
-		Sizzle.matchesSelector = function( node, expr ) {
-			// Make sure that attribute selectors are quoted
-			expr = expr.replace(/\=\s*([^'"\]]*)\s*\]/g, "='$1']");
-
-			if ( !Sizzle.isXML( node ) ) {
-				try {
-					if ( pseudoWorks || !Expr.match.PSEUDO.test( expr ) && !/!=/.test( expr ) ) {
-						var ret = matches.call( node, expr );
-
-						// IE 9's matchesSelector returns false on disconnected nodes
-						if ( ret || !disconnectedMatch ||
-								// As well, disconnected nodes are said to be in a document
-								// fragment in IE 9, so check for that
-								node.document && node.document.nodeType !== 11 ) {
-							return ret;
-						}
-					}
-				} catch(e) {}
-			}
-
-			return Sizzle(expr, null, null, [node]).length > 0;
-		};
-	}
-})();
-
-(function(){
-	var div = document.createElement("div");
-
-	div.innerHTML = "<div class='test e'></div><div class='test'></div>";
-
-	// Opera can't find a second classname (in 9.6)
-	// Also, make sure that getElementsByClassName actually exists
-	if ( !div.getElementsByClassName || div.getElementsByClassName("e").length === 0 ) {
-		return;
-	}
-
-	// Safari caches class attributes, doesn't catch changes (in 3.2)
-	div.lastChild.className = "e";
-
-	if ( div.getElementsByClassName("e").length === 1 ) {
-		return;
-	}
-
-	Expr.order.splice(1, 0, "CLASS");
-	Expr.find.CLASS = function( match, context, isXML ) {
-		if ( typeof context.getElementsByClassName !== "undefined" && !isXML ) {
-			return context.getElementsByClassName(match[1]);
-		}
-	};
-
-	// release memory in IE
-	div = null;
-})();
+// (function(){
+// 	var div = document.createElement("div");
+//
+// 	div.innerHTML = "<div class='test e'></div><div class='test'></div>";
+//
+// 	// Opera can't find a second classname (in 9.6)
+// 	// Also, make sure that getElementsByClassName actually exists
+// 	if ( !div.getElementsByClassName || div.getElementsByClassName("e").length === 0 ) {
+// 		return;
+// 	}
+//
+// 	// Safari caches class attributes, doesn't catch changes (in 3.2)
+// 	div.lastChild.className = "e";
+//
+// 	if ( div.getElementsByClassName("e").length === 1 ) {
+// 		return;
+// 	}
+//
+// 	Expr.order.splice(1, 0, "CLASS");
+// 	Expr.find.CLASS = function( match, context, isXML ) {
+// 		if ( typeof context.getElementsByClassName !== "undefined" && !isXML ) {
+// 			return context.getElementsByClassName(match[1]);
+// 		}
+// 	};
+//
+// 	// release memory in IE
+// 	div = null;
+// })();
 
 function dirNodeCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 	for ( var i = 0, l = checkSet.length; i < l; i++ ) {
@@ -5129,21 +5129,21 @@ function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 	}
 }
 
-if ( document.documentElement.contains ) {
-	Sizzle.contains = function( a, b ) {
-		return a !== b && (a.contains ? a.contains(b) : true);
-	};
-
-} else if ( document.documentElement.compareDocumentPosition ) {
-	Sizzle.contains = function( a, b ) {
-		return !!(a.compareDocumentPosition(b) & 16);
-	};
-
-} else {
-	Sizzle.contains = function() {
-		return false;
-	};
-}
+// if ( document.documentElement.contains ) {
+// 	Sizzle.contains = function( a, b ) {
+// 		return a !== b && (a.contains ? a.contains(b) : true);
+// 	};
+//
+// } else if ( document.documentElement.compareDocumentPosition ) {
+// 	Sizzle.contains = function( a, b ) {
+// 		return !!(a.compareDocumentPosition(b) & 16);
+// 	};
+//
+// } else {
+// 	Sizzle.contains = function() {
+// 		return false;
+// 	};
+// }
 
 Sizzle.isXML = function( elem ) {
 	// documentElement is verified for cases where it doesn't yet exist
@@ -5553,10 +5553,10 @@ wrapMap.optgroup = wrapMap.option;
 wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead;
 wrapMap.th = wrapMap.td;
 
-// IE can't serialize <link> and <script> tags normally
-if ( !jQuery.support.htmlSerialize ) {
-	wrapMap._default = [ 1, "div<div>", "</div>" ];
-}
+// // IE can't serialize <link> and <script> tags normally
+// if ( !jQuery.support.htmlSerialize ) {
+// 	wrapMap._default = [ 1, "div<div>", "</div>" ];
+// }
 
 jQuery.fn.extend({
 	text: function( text ) {
@@ -6354,12 +6354,12 @@ jQuery.extend({
 		"zoom": true
 	},
 
-	// Add in properties whose names you wish to fix before
-	// setting or getting the value
-	cssProps: {
-		// normalize float css property
-		"float": jQuery.support.cssFloat ? "cssFloat" : "styleFloat"
-	},
+	// // Add in properties whose names you wish to fix before
+	// // setting or getting the value
+	// cssProps: {
+	// 	// normalize float css property
+	// 	"float": jQuery.support.cssFloat ? "cssFloat" : "styleFloat"
+	// },
 
 	// Get and set the style property on a DOM Node
 	style: function( elem, name, value, extra ) {
@@ -6494,123 +6494,123 @@ jQuery.each(["height", "width"], function( i, name ) {
 	};
 });
 
-if ( !jQuery.support.opacity ) {
-	jQuery.cssHooks.opacity = {
-		get: function( elem, computed ) {
-			// IE uses filters for opacity
-			return ropacity.test( (computed && elem.currentStyle ? elem.currentStyle.filter : elem.style.filter) || "" ) ?
-				( parseFloat( RegExp.$1 ) / 100 ) + "" :
-				computed ? "1" : "";
-		},
+// if ( !jQuery.support.opacity ) {
+// 	jQuery.cssHooks.opacity = {
+// 		get: function( elem, computed ) {
+// 			// IE uses filters for opacity
+// 			return ropacity.test( (computed && elem.currentStyle ? elem.currentStyle.filter : elem.style.filter) || "" ) ?
+// 				( parseFloat( RegExp.$1 ) / 100 ) + "" :
+// 				computed ? "1" : "";
+// 		},
+//
+// 		set: function( elem, value ) {
+// 			var style = elem.style,
+// 				currentStyle = elem.currentStyle,
+// 				opacity = jQuery.isNaN( value ) ? "" : "alpha(opacity=" + value * 100 + ")",
+// 				filter = currentStyle && currentStyle.filter || style.filter || "";
+//
+// 			// IE has trouble with opacity if it does not have layout
+// 			// Force it by setting the zoom level
+// 			style.zoom = 1;
+//
+// 			// if setting opacity to 1, and no other filters exist - attempt to remove filter attribute #6652
+// 			if ( value >= 1 && jQuery.trim( filter.replace( ralpha, "" ) ) === "" ) {
+//
+// 				// Setting style.filter to null, "" & " " still leave "filter:" in the cssText
+// 				// if "filter:" is present at all, clearType is disabled, we want to avoid this
+// 				// style.removeAttribute is IE Only, but so apparently is this code path...
+// 				style.removeAttribute( "filter" );
+//
+// 				// if there there is no filter style applied in a css rule, we are done
+// 				if ( currentStyle && !currentStyle.filter ) {
+// 					return;
+// 				}
+// 			}
+//
+// 			// otherwise, set new filter values
+// 			style.filter = ralpha.test( filter ) ?
+// 				filter.replace( ralpha, opacity ) :
+// 				filter + " " + opacity;
+// 		}
+// 	};
+// }
 
-		set: function( elem, value ) {
-			var style = elem.style,
-				currentStyle = elem.currentStyle,
-				opacity = jQuery.isNaN( value ) ? "" : "alpha(opacity=" + value * 100 + ")",
-				filter = currentStyle && currentStyle.filter || style.filter || "";
+// jQuery(function() {
+// 	// This hook cannot be added until DOM ready because the support test
+// 	// for it is not run until after DOM ready
+// 	if ( !jQuery.support.reliableMarginRight ) {
+// 		jQuery.cssHooks.marginRight = {
+// 			get: function( elem, computed ) {
+// 				// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
+// 				// Work around by temporarily setting element display to inline-block
+// 				var ret;
+// 				jQuery.swap( elem, { "display": "inline-block" }, function() {
+// 					if ( computed ) {
+// 						ret = curCSS( elem, "margin-right", "marginRight" );
+// 					} else {
+// 						ret = elem.style.marginRight;
+// 					}
+// 				});
+// 				return ret;
+// 			}
+// 		};
+// 	}
+// });
 
-			// IE has trouble with opacity if it does not have layout
-			// Force it by setting the zoom level
-			style.zoom = 1;
-
-			// if setting opacity to 1, and no other filters exist - attempt to remove filter attribute #6652
-			if ( value >= 1 && jQuery.trim( filter.replace( ralpha, "" ) ) === "" ) {
-
-				// Setting style.filter to null, "" & " " still leave "filter:" in the cssText
-				// if "filter:" is present at all, clearType is disabled, we want to avoid this
-				// style.removeAttribute is IE Only, but so apparently is this code path...
-				style.removeAttribute( "filter" );
-
-				// if there there is no filter style applied in a css rule, we are done
-				if ( currentStyle && !currentStyle.filter ) {
-					return;
-				}
-			}
-
-			// otherwise, set new filter values
-			style.filter = ralpha.test( filter ) ?
-				filter.replace( ralpha, opacity ) :
-				filter + " " + opacity;
-		}
-	};
-}
-
-jQuery(function() {
-	// This hook cannot be added until DOM ready because the support test
-	// for it is not run until after DOM ready
-	if ( !jQuery.support.reliableMarginRight ) {
-		jQuery.cssHooks.marginRight = {
-			get: function( elem, computed ) {
-				// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
-				// Work around by temporarily setting element display to inline-block
-				var ret;
-				jQuery.swap( elem, { "display": "inline-block" }, function() {
-					if ( computed ) {
-						ret = curCSS( elem, "margin-right", "marginRight" );
-					} else {
-						ret = elem.style.marginRight;
-					}
-				});
-				return ret;
-			}
-		};
-	}
-});
-
-if ( document.defaultView && document.defaultView.getComputedStyle ) {
-	getComputedStyle = function( elem, name ) {
-		var ret, defaultView, computedStyle;
-
-		name = name.replace( rupper, "-$1" ).toLowerCase();
-
-		if ( !(defaultView = elem.ownerDocument.defaultView) ) {
-			return undefined;
-		}
-
-		if ( (computedStyle = defaultView.getComputedStyle( elem, null )) ) {
-			ret = computedStyle.getPropertyValue( name );
-			if ( ret === "" && !jQuery.contains( elem.ownerDocument.documentElement, elem ) ) {
-				ret = jQuery.style( elem, name );
-			}
-		}
-
-		return ret;
-	};
-}
-
-if ( document.documentElement.currentStyle ) {
-	currentStyle = function( elem, name ) {
-		var left,
-			ret = elem.currentStyle && elem.currentStyle[ name ],
-			rsLeft = elem.runtimeStyle && elem.runtimeStyle[ name ],
-			style = elem.style;
-
-		// From the awesome hack by Dean Edwards
-		// http://erik.eae.net/archives/2007/07/27/18.54.15/#comment-102291
-
-		// If we're not dealing with a regular pixel number
-		// but a number that has a weird ending, we need to convert it to pixels
-		if ( !rnumpx.test( ret ) && rnum.test( ret ) ) {
-			// Remember the original values
-			left = style.left;
-
-			// Put in the new values to get a computed value out
-			if ( rsLeft ) {
-				elem.runtimeStyle.left = elem.currentStyle.left;
-			}
-			style.left = name === "fontSize" ? "1em" : (ret || 0);
-			ret = style.pixelLeft + "px";
-
-			// Revert the changed values
-			style.left = left;
-			if ( rsLeft ) {
-				elem.runtimeStyle.left = rsLeft;
-			}
-		}
-
-		return ret === "" ? "auto" : ret;
-	};
-}
+// if ( document.defaultView && document.defaultView.getComputedStyle ) {
+// 	getComputedStyle = function( elem, name ) {
+// 		var ret, defaultView, computedStyle;
+//
+// 		name = name.replace( rupper, "-$1" ).toLowerCase();
+//
+// 		if ( !(defaultView = elem.ownerDocument.defaultView) ) {
+// 			return undefined;
+// 		}
+//
+// 		if ( (computedStyle = defaultView.getComputedStyle( elem, null )) ) {
+// 			ret = computedStyle.getPropertyValue( name );
+// 			if ( ret === "" && !jQuery.contains( elem.ownerDocument.documentElement, elem ) ) {
+// 				ret = jQuery.style( elem, name );
+// 			}
+// 		}
+//
+// 		return ret;
+// 	};
+// }
+//
+// if ( document.documentElement.currentStyle ) {
+// 	currentStyle = function( elem, name ) {
+// 		var left,
+// 			ret = elem.currentStyle && elem.currentStyle[ name ],
+// 			rsLeft = elem.runtimeStyle && elem.runtimeStyle[ name ],
+// 			style = elem.style;
+//
+// 		// From the awesome hack by Dean Edwards
+// 		// http://erik.eae.net/archives/2007/07/27/18.54.15/#comment-102291
+//
+// 		// If we're not dealing with a regular pixel number
+// 		// but a number that has a weird ending, we need to convert it to pixels
+// 		if ( !rnumpx.test( ret ) && rnum.test( ret ) ) {
+// 			// Remember the original values
+// 			left = style.left;
+//
+// 			// Put in the new values to get a computed value out
+// 			if ( rsLeft ) {
+// 				elem.runtimeStyle.left = elem.currentStyle.left;
+// 			}
+// 			style.left = name === "fontSize" ? "1em" : (ret || 0);
+// 			ret = style.pixelLeft + "px";
+//
+// 			// Revert the changed values
+// 			style.left = left;
+// 			if ( rsLeft ) {
+// 				elem.runtimeStyle.left = rsLeft;
+// 			}
+// 		}
+//
+// 		return ret === "" ? "auto" : ret;
+// 	};
+// }
 
 curCSS = getComputedStyle || currentStyle;
 
@@ -6729,11 +6729,13 @@ var r20 = /%20/g,
 try {
 	ajaxLocation = location.href;
 } catch( e ) {
-	// Use the href attribute of an A element
-	// since IE will modify it given document.location
-	ajaxLocation = document.createElement( "a" );
-	ajaxLocation.href = "";
-	ajaxLocation = ajaxLocation.href;
+	// // Use the href attribute of an A element
+	// // since IE will modify it given document.location
+	// ajaxLocation = document.createElement( "a" );
+	// ajaxLocation.href = "";
+	// ajaxLocation = ajaxLocation.href;
+
+	ajaxLocation = '';
 }
 
 // Segment location into parts
@@ -7892,11 +7894,11 @@ jQuery.ajaxSettings.xhr = window.ActiveXObject ?
 })( jQuery.ajaxSettings.xhr() );
 
 // Create transport if the browser can provide an xhr
-if ( jQuery.support.ajax ) {
+if ( true ) {
 
 	jQuery.ajaxTransport(function( s ) {
 		// Cross domain only allowed if supported through XMLHttpRequest
-		if ( !s.crossDomain || jQuery.support.cors ) {
+		if ( !s.crossDomain || true ) {
 
 			var callback;
 
@@ -8668,122 +8670,122 @@ function defaultDisplay( nodeName ) {
 var rtable = /^t(?:able|d|h)$/i,
 	rroot = /^(?:body|html)$/i;
 
-if ( "getBoundingClientRect" in document.documentElement ) {
-	jQuery.fn.offset = function( options ) {
-		var elem = this[0], box;
-
-		if ( options ) {
-			return this.each(function( i ) {
-				jQuery.offset.setOffset( this, options, i );
-			});
-		}
-
-		if ( !elem || !elem.ownerDocument ) {
-			return null;
-		}
-
-		if ( elem === elem.ownerDocument.body ) {
-			return jQuery.offset.bodyOffset( elem );
-		}
-
-		try {
-			box = elem.getBoundingClientRect();
-		} catch(e) {}
-
-		var doc = elem.ownerDocument,
-			docElem = doc.documentElement;
-
-		// Make sure we're not dealing with a disconnected DOM node
-		if ( !box || !jQuery.contains( docElem, elem ) ) {
-			return box ? { top: box.top, left: box.left } : { top: 0, left: 0 };
-		}
-
-		var body = doc.body,
-			win = getWindow(doc),
-			clientTop  = docElem.clientTop  || body.clientTop  || 0,
-			clientLeft = docElem.clientLeft || body.clientLeft || 0,
-			scrollTop  = win.pageYOffset || jQuery.support.boxModel && docElem.scrollTop  || body.scrollTop,
-			scrollLeft = win.pageXOffset || jQuery.support.boxModel && docElem.scrollLeft || body.scrollLeft,
-			top  = box.top  + scrollTop  - clientTop,
-			left = box.left + scrollLeft - clientLeft;
-
-		return { top: top, left: left };
-	};
-
-} else {
-	jQuery.fn.offset = function( options ) {
-		var elem = this[0];
-
-		if ( options ) {
-			return this.each(function( i ) {
-				jQuery.offset.setOffset( this, options, i );
-			});
-		}
-
-		if ( !elem || !elem.ownerDocument ) {
-			return null;
-		}
-
-		if ( elem === elem.ownerDocument.body ) {
-			return jQuery.offset.bodyOffset( elem );
-		}
-
-		jQuery.offset.initialize();
-
-		var computedStyle,
-			offsetParent = elem.offsetParent,
-			prevOffsetParent = elem,
-			doc = elem.ownerDocument,
-			docElem = doc.documentElement,
-			body = doc.body,
-			defaultView = doc.defaultView,
-			prevComputedStyle = defaultView ? defaultView.getComputedStyle( elem, null ) : elem.currentStyle,
-			top = elem.offsetTop,
-			left = elem.offsetLeft;
-
-		while ( (elem = elem.parentNode) && elem !== body && elem !== docElem ) {
-			if ( jQuery.offset.supportsFixedPosition && prevComputedStyle.position === "fixed" ) {
-				break;
-			}
-
-			computedStyle = defaultView ? defaultView.getComputedStyle(elem, null) : elem.currentStyle;
-			top  -= elem.scrollTop;
-			left -= elem.scrollLeft;
-
-			if ( elem === offsetParent ) {
-				top  += elem.offsetTop;
-				left += elem.offsetLeft;
-
-				if ( jQuery.offset.doesNotAddBorder && !(jQuery.offset.doesAddBorderForTableAndCells && rtable.test(elem.nodeName)) ) {
-					top  += parseFloat( computedStyle.borderTopWidth  ) || 0;
-					left += parseFloat( computedStyle.borderLeftWidth ) || 0;
-				}
-
-				prevOffsetParent = offsetParent;
-				offsetParent = elem.offsetParent;
-			}
-
-			if ( jQuery.offset.subtractsBorderForOverflowNotVisible && computedStyle.overflow !== "visible" ) {
-				top  += parseFloat( computedStyle.borderTopWidth  ) || 0;
-				left += parseFloat( computedStyle.borderLeftWidth ) || 0;
-			}
-
-			prevComputedStyle = computedStyle;
-		}
-
-		if ( prevComputedStyle.position === "relative" || prevComputedStyle.position === "static" ) {
-			top  += body.offsetTop;
-			left += body.offsetLeft;
-		}
-
-		if ( jQuery.offset.supportsFixedPosition && prevComputedStyle.position === "fixed" ) {
-			top  += Math.max( docElem.scrollTop, body.scrollTop );
-			left += Math.max( docElem.scrollLeft, body.scrollLeft );
-		}
-
-		return { top: top, left: left };
-	};
-}
+// if ( "getBoundingClientRect" in document.documentElement ) {
+// 	jQuery.fn.offset = function( options ) {
+// 		var elem = this[0], box;
+//
+// 		if ( options ) {
+// 			return this.each(function( i ) {
+// 				jQuery.offset.setOffset( this, options, i );
+// 			});
+// 		}
+//
+// 		if ( !elem || !elem.ownerDocument ) {
+// 			return null;
+// 		}
+//
+// 		if ( elem === elem.ownerDocument.body ) {
+// 			return jQuery.offset.bodyOffset( elem );
+// 		}
+//
+// 		try {
+// 			box = elem.getBoundingClientRect();
+// 		} catch(e) {}
+//
+// 		var doc = elem.ownerDocument,
+// 			docElem = doc.documentElement;
+//
+// 		// Make sure we're not dealing with a disconnected DOM node
+// 		if ( !box || !jQuery.contains( docElem, elem ) ) {
+// 			return box ? { top: box.top, left: box.left } : { top: 0, left: 0 };
+// 		}
+//
+// 		var body = doc.body,
+// 			win = getWindow(doc),
+// 			clientTop  = docElem.clientTop  || body.clientTop  || 0,
+// 			clientLeft = docElem.clientLeft || body.clientLeft || 0,
+// 			scrollTop  = win.pageYOffset || jQuery.support.boxModel && docElem.scrollTop  || body.scrollTop,
+// 			scrollLeft = win.pageXOffset || jQuery.support.boxModel && docElem.scrollLeft || body.scrollLeft,
+// 			top  = box.top  + scrollTop  - clientTop,
+// 			left = box.left + scrollLeft - clientLeft;
+//
+// 		return { top: top, left: left };
+// 	};
+//
+// } else {
+// 	jQuery.fn.offset = function( options ) {
+// 		var elem = this[0];
+//
+// 		if ( options ) {
+// 			return this.each(function( i ) {
+// 				jQuery.offset.setOffset( this, options, i );
+// 			});
+// 		}
+//
+// 		if ( !elem || !elem.ownerDocument ) {
+// 			return null;
+// 		}
+//
+// 		if ( elem === elem.ownerDocument.body ) {
+// 			return jQuery.offset.bodyOffset( elem );
+// 		}
+//
+// 		jQuery.offset.initialize();
+//
+// 		var computedStyle,
+// 			offsetParent = elem.offsetParent,
+// 			prevOffsetParent = elem,
+// 			doc = elem.ownerDocument,
+// 			docElem = doc.documentElement,
+// 			body = doc.body,
+// 			defaultView = doc.defaultView,
+// 			prevComputedStyle = defaultView ? defaultView.getComputedStyle( elem, null ) : elem.currentStyle,
+// 			top = elem.offsetTop,
+// 			left = elem.offsetLeft;
+//
+// 		while ( (elem = elem.parentNode) && elem !== body && elem !== docElem ) {
+// 			if ( jQuery.offset.supportsFixedPosition && prevComputedStyle.position === "fixed" ) {
+// 				break;
+// 			}
+//
+// 			computedStyle = defaultView ? defaultView.getComputedStyle(elem, null) : elem.currentStyle;
+// 			top  -= elem.scrollTop;
+// 			left -= elem.scrollLeft;
+//
+// 			if ( elem === offsetParent ) {
+// 				top  += elem.offsetTop;
+// 				left += elem.offsetLeft;
+//
+// 				if ( jQuery.offset.doesNotAddBorder && !(jQuery.offset.doesAddBorderForTableAndCells && rtable.test(elem.nodeName)) ) {
+// 					top  += parseFloat( computedStyle.borderTopWidth  ) || 0;
+// 					left += parseFloat( computedStyle.borderLeftWidth ) || 0;
+// 				}
+//
+// 				prevOffsetParent = offsetParent;
+// 				offsetParent = elem.offsetParent;
+// 			}
+//
+// 			if ( jQuery.offset.subtractsBorderForOverflowNotVisible && computedStyle.overflow !== "visible" ) {
+// 				top  += parseFloat( computedStyle.borderTopWidth  ) || 0;
+// 				left += parseFloat( computedStyle.borderLeftWidth ) || 0;
+// 			}
+//
+// 			prevComputedStyle = computedStyle;
+// 		}
+//
+// 		if ( prevComputedStyle.position === "relative" || prevComputedStyle.position === "static" ) {
+// 			top  += body.offsetTop;
+// 			left += body.offsetLeft;
+// 		}
+//
+// 		if ( jQuery.offset.supportsFixedPosition && prevComputedStyle.position === "fixed" ) {
+// 			top  += Math.max( docElem.scrollTop, body.scrollTop );
+// 			left += Math.max( docElem.scrollLeft, body.scrollLeft );
+// 		}
+//
+// 		return { top: top, left: left };
+// 	};
+// }
 
 jQuery.offset = {
 	initialize: function() {

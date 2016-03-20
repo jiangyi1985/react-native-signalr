@@ -47,7 +47,10 @@
 
     var signalR,
         _connection,
-        _pageLoaded = (window.document.readyState === "complete"),
+
+        // _pageLoaded = (window.document.readyState === "complete"),
+        _pageLoaded=true,
+
         _pageWindow = $(window),
         _negotiateAbortText = "__Negotiate Aborted__",
         events = {
@@ -200,14 +203,14 @@
             return s;
         },
 
-        firefoxMajorVersion: function (userAgent) {
-            // Firefox user agents: http://useragentstring.com/pages/Firefox/
-            var matches = userAgent.match(/Firefox\/(\d+)/);
-            if (!matches || !matches.length || matches.length < 2) {
-                return 0;
-            }
-            return parseInt(matches[1], 10 /* radix */);
-        },
+        // firefoxMajorVersion: function (userAgent) {
+        //     // Firefox user agents: http://useragentstring.com/pages/Firefox/
+        //     var matches = userAgent.match(/Firefox\/(\d+)/);
+        //     if (!matches || !matches.length || matches.length < 2) {
+        //         return 0;
+        //     }
+        //     return parseInt(matches[1], 10 /* radix */);
+        // },
 
         configurePingInterval: function (connection) {
             var config = connection._.config,
@@ -368,28 +371,29 @@
         json: window.JSON,
 
         isCrossDomain: function (url, against) {
-            /// <summary>Checks if url is cross domain</summary>
-            /// <param name="url" type="String">The base URL</param>
-            /// <param name="against" type="Object">
-            ///     An optional argument to compare the URL against, if not specified it will be set to window.location.
-            ///     If specified it must contain a protocol and a host property.
-            /// </param>
-            var link;
-
-            url = $.trim(url);
-
-            against = against || window.location;
-
-            if (url.indexOf("http") !== 0) {
-                return false;
-            }
-
-            // Create an anchor tag.
-            link = window.document.createElement("a");
-            link.href = url;
-
-            // When checking for cross domain we have to special case port 80 because the window.location will remove the
-            return link.protocol + addDefaultPort(link.protocol, link.host) !== against.protocol + addDefaultPort(against.protocol, against.host);
+            // /// <summary>Checks if url is cross domain</summary>
+            // /// <param name="url" type="String">The base URL</param>
+            // /// <param name="against" type="Object">
+            // ///     An optional argument to compare the URL against, if not specified it will be set to window.location.
+            // ///     If specified it must contain a protocol and a host property.
+            // /// </param>
+            // var link;
+            //
+            // url = $.trim(url);
+            //
+            // against = against || window.location;
+            //
+            // if (url.indexOf("http") !== 0) {
+            //     return false;
+            // }
+            //
+            // // Create an anchor tag.
+            // link = window.document.createElement("a");
+            // link.href = url;
+            //
+            // // When checking for cross domain we have to special case port 80 because the window.location will remove the
+            // return link.protocol + addDefaultPort(link.protocol, link.host) !== against.protocol + addDefaultPort(against.protocol, against.host);
+            return true;
         },
 
         ajaxDataType: "text",
@@ -424,8 +428,8 @@
                     jsonp: false
                 },
                 initialize,
-                deferred = connection._deferral || $.Deferred(), // Check to see if there is a pre-existing deferral that's being built on, if so we want to keep using it
-                parser = window.document.createElement("a");
+                deferred = connection._deferral || $.Deferred();//, // Check to see if there is a pre-existing deferral that's being built on, if so we want to keep using it
+                // parser = window.document.createElement("a");
 
             connection.lastError = null;
 
@@ -483,19 +487,24 @@
             configureStopReconnectingTimeout(connection);
 
             // Resolve the full url
-            parser.href = connection.url;
-            if (!parser.protocol || parser.protocol === ":") {
-                connection.protocol = window.document.location.protocol;
-                connection.host = parser.host || window.document.location.host;
-            } else {
-                connection.protocol = parser.protocol;
-                connection.host = parser.host;
-            }
+            // parser.href = connection.url;
+            // if (!parser.protocol || parser.protocol === ":") {
+            //     connection.protocol = window.document.location.protocol;
+            //     connection.host = parser.host || window.document.location.host;
+            // } else {
+            //     connection.protocol = parser.protocol;
+            //     connection.host = parser.host;
+            // }
+            connection.protocol=connection.url.substr(0,connection.url.indexOf('//'));
+            var urlSubstr=connection.url.substr(connection.url.indexOf('//')+2);
+            connection.host=urlSubstr.substr(0,urlSubstr.indexOf('/'));
 
             connection.baseUrl = connection.protocol + "//" + connection.host;
 
             // Set the websocket protocol
             connection.wsProtocol = connection.protocol === "https:" ? "wss://" : "ws://";
+
+// debugger;
 
             // If jsonp with no/auto transport is specified, then set the transport to long polling
             // since that is the only transport for which jsonp really makes sense.
@@ -523,23 +532,23 @@
                     config.withCredentials = true;
                 }
 
-                // Determine if jsonp is the only choice for negotiation, ajaxSend and ajaxAbort.
-                // i.e. if the browser doesn't supports CORS
-                // If it is, ignore any preference to the contrary, and switch to jsonp.
-                if (!config.jsonp) {
-                    config.jsonp = !$.support.cors;
-
-                    if (config.jsonp) {
-                        connection.log("Using jsonp because this browser doesn't support CORS.");
-                    }
-                }
+                // // Determine if jsonp is the only choice for negotiation, ajaxSend and ajaxAbort.
+                // // i.e. if the browser doesn't supports CORS
+                // // If it is, ignore any preference to the contrary, and switch to jsonp.
+                // if (!config.jsonp) {
+                //     config.jsonp = !$.support.cors;
+                //
+                //     if (config.jsonp) {
+                //         connection.log("Using jsonp because this browser doesn't support CORS.");
+                //     }
+                // }
 
                 connection.contentType = signalR._.defaultContentType;
             }
 
             connection.withCredentials = config.withCredentials;
 
-            connection.ajaxDataType = config.jsonp ? "jsonp" : "text";
+            connection.ajaxDataType ="text";// config.jsonp ? "jsonp" : "text";
 
             $(connection).bind(events.onStart, function (e, data) {
                 if ($.type(callback) === "function") {
@@ -586,9 +595,9 @@
 
                 try {
                     connection._.initHandler.start(transport, function () { // success
-                        // Firefox 11+ doesn't allow sync XHR withCredentials: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest#withCredentials
-                        var isFirefox11OrGreater = signalR._.firefoxMajorVersion(window.navigator.userAgent) >= 11,
-                            asyncAbort = !!connection.withCredentials && isFirefox11OrGreater;
+                        // // Firefox 11+ doesn't allow sync XHR withCredentials: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest#withCredentials
+                        // var isFirefox11OrGreater = signalR._.firefoxMajorVersion(window.navigator.userAgent) >= 11,
+                        //     asyncAbort = !!connection.withCredentials && isFirefox11OrGreater;
 
                         connection.log("The start request succeeded. Transitioning to the connected state.");
 
@@ -620,17 +629,17 @@
                             connection.stop(asyncAbort);
                         });
 
-                        if (isFirefox11OrGreater) {
-                            // Firefox does not fire cross-domain XHRs in the normal unload handler on tab close.
-                            // #2400
-                            _pageWindow.bind("beforeunload", function () {
-                                // If connection.stop() runs runs in beforeunload and fails, it will also fail
-                                // in unload unless connection.stop() runs after a timeout.
-                                window.setTimeout(function () {
-                                    connection.stop(asyncAbort);
-                                }, 0);
-                            });
-                        }
+                        // if (isFirefox11OrGreater) {
+                        //     // Firefox does not fire cross-domain XHRs in the normal unload handler on tab close.
+                        //     // #2400
+                        //     _pageWindow.bind("beforeunload", function () {
+                        //         // If connection.stop() runs runs in beforeunload and fails, it will also fail
+                        //         // in unload unless connection.stop() runs after a timeout.
+                        //         window.setTimeout(function () {
+                        //             connection.stop(asyncAbort);
+                        //         }, 0);
+                        //     });
+                        // }
                     }, onFallback);
                 }
                 catch (error) {
@@ -655,10 +664,13 @@
 
             connection.log("Negotiating with '" + url + "'.");
 
+// debugger;
             // Save the ajax negotiate request object so we can abort it if stop is called while the request is in flight.
             connection._.negotiateRequest = signalR.transports._logic.ajax(connection, {
                 url: url,
                 error: function (error, statusText) {
+// debugger;
+
                     // We don't want to cause any errors if we're aborting our own negotiate request.
                     if (statusText !== _negotiateAbortText) {
                         onFailed(error, connection);
@@ -815,6 +827,7 @@
                 // In practice 'sendData' is undefined for all error events except those triggered by
                 // 'ajaxSend' and 'webSockets.send'.'sendData' is the original send payload.
                 callback.call(connection, errorData, sendData);
+                // debugger;
             });
             return connection;
         },
@@ -837,6 +850,7 @@
             var connection = this;
             $(connection).bind(events.onConnectionSlow, function (e, data) {
                 callback.call(connection);
+                  // debugger;
             });
 
             return connection;
@@ -1074,6 +1088,7 @@
                     that.initReceived(transport, onSuccess);
                 }
             }, function (error) {
+              // debugger;
                 // Don't allow the same transport to cause onFallback to be called twice
                 if (!failCalled) {
                     failCalled = true;
@@ -1294,6 +1309,8 @@
 
         // BUG #2953: The url needs to be same otherwise it will cause a memory leak
         getUrl: function (connection, transport, reconnecting, poll, ajaxPost) {
+
+          // debugger;
             /// <summary>Gets the url for making a GET based connect request</summary>
             var baseUrl = transport === "webSockets" ? "" : connection.baseUrl,
                 url = baseUrl + connection.appRelativeUrl,
@@ -1720,6 +1737,7 @@
                 url += transportLogic.getUrl(connection, this.name, reconnecting);
 
                 connection.log("Connecting to websocket endpoint '" + url + "'.");
+                // debugger;
                 connection.socket = new window.WebSocket(url);
 
                 connection.socket.onopen = function () {
